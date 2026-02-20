@@ -1,13 +1,233 @@
+/* Global Theme */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Poppins', sans-serif;
+  background: #111;
+  color: white;
+}
+
+/* Layout */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Glass Sidebar */
+.sidebar {
+  width: 240px;
+  backdrop-filter: blur(85px);
+  background: rgba(183, 28, 28, 0.6);
+  border-right: 1px solid rgba(255,255,255,0.2);
+  padding: 25px;
+  position: fixed;
+  height: 100vh;
+  z-index: 10;
+}
+
+.logo {
+  margin-bottom: 25px;
+  font-weight: 600;
+  font-size: 22px;
+  color: #fff;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.links a {
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.links a:hover {
+  background: rgba(255,255,255,0.2);
+  transform: translateX(5px);
+}
+
+/* Content */
+.content {
+  margin-left: 240px;
+  flex: 1;
+  min-height: 100vh;
+  position: relative;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+.hero {
+  height: 100vh;
+  background: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+  position: relative;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.6),
+    rgba(0,0,0,0.4)
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.top-bar {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logout-btn {
+  background: #e91e63;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c2185b;
+}
+/* ================= HOME PAGE ================= */
+
+.home-page {
+  min-height: 100vh;
+  position: relative;
+  background: #111; 
+}
+
+/* Floating Glass Top Bar */
+.home-topbar {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  backdrop-filter: blur(10px);
+  background: rgba(0,0,0,0.4);
+  padding: 8px 15px;
+  border-radius: 30px;
+  z-index: 5;
+}
+
+.welcome-text {
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: #e91e63;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: #c2185b;
+  transform: scale(1.05);
+}
+
+/* Hero Section */
+.hero-section {
+  min-height: 100vh;
+  background: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80')
+    center/cover no-repeat;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Smooth immersive gradient overlay */
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0.6),
+    rgba(0,0,0,0.75)
+  );
+}
+
+/* Hero Content */
+.hero-content {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.hero-content h1 {
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hero-content p {
+  margin-top: 15px;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* Specialities Section */
+.specialities-section {
+  margin: -450px auto 60px auto;
+  padding: 50px 40px;
+  max-width: 1100px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  background: rgba(255,255,255,0.08);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.specialities-section h2 {
+  margin-bottom: 30px;
+  font-size: 28px;
+}
+
+/* Grid */
+.specialities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+/* Cards */
+.special-card {
+  padding: 35px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,0.15);
+  font-weight: 600;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.special-card:hover {
+  background: rgba(233,30,99,0.4);
+  transform: translateY(-8px);
 }
