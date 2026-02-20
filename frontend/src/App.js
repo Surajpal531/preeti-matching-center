@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
@@ -19,6 +19,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState("");
   const [loading, setLoading] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -53,25 +54,36 @@ function App() {
 
   return (
   <Router>
-    <div className="layout">
-      <div className="sidebar">
-        <h2 className="logo">Preeti Center</h2>
-
-        <div className="links">
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/products">Products</Link>
-          <Link to="/gallery">Gallery</Link>
-          <Link to="/customers">Customers</Link>
-          <Link to="/add-customer">Add Customer</Link>
-          <Link to="/orders">Orders</Link>
-          <Link to="/add-order">Add Order</Link>
-          <Link to="/contact">Contact</Link>
-          <Link to="/admin">Admin</Link>
-        </div>
+  <div className="layout">
+    
+    <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+      
+      <div className="sidebar-header">
+        {!collapsed && <h2 className="logo">Preeti Center</h2>}
+        <button
+          className="collapse-btn"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? "☰" : "⮜"}
+        </button>
       </div>
 
-      <div className="content">
+      <div className="links">
+        <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink>
+        <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>About</NavLink>
+        <NavLink to="/products" className={({ isActive }) => isActive ? "active" : ""}>Products</NavLink>
+        <NavLink to="/gallery" className={({ isActive }) => isActive ? "active" : ""}>Gallery</NavLink>
+        <NavLink to="/customers" className={({ isActive }) => isActive ? "active" : ""}>Customers</NavLink>
+        <NavLink to="/add-customer" className={({ isActive }) => isActive ? "active" : ""}>Add Customer</NavLink>
+        <NavLink to="/orders" className={({ isActive }) => isActive ? "active" : ""}>Orders</NavLink>
+        <NavLink to="/add-order" className={({ isActive }) => isActive ? "active" : ""}>Add Order</NavLink>
+        <NavLink to="/contact" className={({ isActive }) => isActive ? "active" : ""}>Contact</NavLink>
+        <NavLink to="/admin" className={({ isActive }) => isActive ? "active" : ""}>Admin</NavLink>
+      </div>
+
+    </div>
+
+    <div className={`content ${collapsed ? "expanded" : ""}`}>
         <Routes>
           <Route
             path="/"
