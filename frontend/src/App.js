@@ -19,6 +19,7 @@ import Login from "./admin/Login";
 import ProtectedRoute from "./admin/ProtectedRoute";
 import AddProduct from "./admin/AddProduct";
 import AddCustomer from "./admin/AddCustomer";
+import AddOrder from "./admin/AddOrder";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="customers" element={<Customers />} />
         <Route path="add-customer" element={<AddCustomer />} />
         <Route path="orders" element={<Orders />} />
+        <Route path="add-order" element={<AddOrder />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="add-product" element={<AddProduct />} />
       </Route>

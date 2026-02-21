@@ -688,18 +688,21 @@
 .admin-content {
   padding: 40px;
 }
-/* Dashboard Cards */
+/* ================= DASHBOARD UPGRADE ================= */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 25px;
+  margin-top: 30px;
 }
 
 .dashboard-card {
-  background: #1f2937;
+  background: linear-gradient(135deg, #1f2937, #111827);
   padding: 30px;
   border-radius: 16px;
   transition: 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 .dashboard-card h3 {
@@ -714,8 +717,8 @@
 }
 
 .dashboard-card:hover {
-  transform: translateY(-5px);
-  background: #374151;
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
 }
 .admin-form {
   display: flex;
@@ -790,4 +793,18 @@
   border: none;
   min-height: 80px;
   resize: vertical;
+}
+.admin-form select {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+/* ================= SALES CHART ================= */
+
+.chart-card {
+  margin-top: 40px;
+  background: linear-gradient(135deg, #1f2937, #111827);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.05);
 }
