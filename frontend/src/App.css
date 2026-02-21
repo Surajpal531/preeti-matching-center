@@ -49,3 +49,43 @@ button:hover {
   justify-content: space-between;
   align-items: center;
 }
+/* ================= ADMIN PANEL ================= */
+
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #111;
+  color: white;
+}
+
+.admin-sidebar {
+  width: 220px;
+  background: #1c1c1c;
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.admin-logo {
+  margin-bottom: 30px;
+}
+
+.admin-sidebar a {
+  text-decoration: none;
+  color: rgba(255,255,255,0.7);
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.admin-sidebar a:hover,
+.admin-sidebar a.active {
+  background: #e91e63;
+  color: white;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 40px;
+}

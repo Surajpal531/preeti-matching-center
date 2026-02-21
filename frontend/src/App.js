@@ -1,115 +1,58 @@
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { Routes, Route } from "react-router-dom";
 
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Products from "./pages/Products";
-import Gallery from "./pages/Gallery";
-import Customers from "./pages/Customers";
-import AddCustomer from "./pages/AddCustomer";
-import Orders from "./pages/Orders";
-import AddOrder from "./pages/AddOrder";
-import Contact from "./pages/Contact";
-import Admin from "./pages/Admin";
+// Public Pages
+import PublicLayout from "./public/PublicLayout";
+import Home from "./public/Home";
+import About from "./public/About";
+import Products from "./public/Products";
+import Gallery from "./public/Gallery";
+import Contact from "./public/Contact";
+
+
+// Admin
+import AdminLayout from "./admin/AdminLayout";
+import Dashboard from "./admin/Dashboard";
+import AdminProducts from "./admin/Products";
+import Customers from "./admin/Customers";
+import Orders from "./admin/Orders";
+import Login from "./admin/Login";
+import ProtectedRoute from "./admin/ProtectedRoute";
+import AddProduct from "./admin/AddProduct";
+import AddCustomer from "./admin/AddCustomer";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [collapsed, setCollapsed] = useState(false);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser.displayName);
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-        setUser("");
-      }
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  // 🔥 Important: wait until Firebase checks auth
-  if (loading) {
-    return <div style={{ padding: 40 }}>Checking login...</div>;
-  }
-
-  if (!loggedIn) {
-    return (
-      <Login
-        onLogin={(username) => {
-          setUser(username);
-          setLoggedIn(true);
-        }}
-      />
-    );
-  }
-
   return (
-  <Router>
-  <div className="layout">
-    
-    <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
-      
-      <div className="sidebar-header">
-        {!collapsed && <h2 className="logo">Preeti Center</h2>}
-        <button
-          className="collapse-btn"
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          {collapsed ? "☰" : "⮜"}
-        </button>
-      </div>
+    <Routes>
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="products" element={<Products />} />
+        <Route path="gallery" element={<Gallery />} />
+        <Route path="contact" element={<Contact />} />
+      </Route>
+      {/* Admin Login */}
+      <Route path="/admin/login" element={<Login />} />
 
-      <div className="links">
-        <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink>
-        <NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""}>About</NavLink>
-        <NavLink to="/products" className={({ isActive }) => isActive ? "active" : ""}>Products</NavLink>
-        <NavLink to="/gallery" className={({ isActive }) => isActive ? "active" : ""}>Gallery</NavLink>
-        <NavLink to="/customers" className={({ isActive }) => isActive ? "active" : ""}>Customers</NavLink>
-        <NavLink to="/add-customer" className={({ isActive }) => isActive ? "active" : ""}>Add Customer</NavLink>
-        <NavLink to="/orders" className={({ isActive }) => isActive ? "active" : ""}>Orders</NavLink>
-        <NavLink to="/add-order" className={({ isActive }) => isActive ? "active" : ""}>Add Order</NavLink>
-        <NavLink to="/contact" className={({ isActive }) => isActive ? "active" : ""}>Contact</NavLink>
-        <NavLink to="/admin" className={({ isActive }) => isActive ? "active" : ""}>Admin</NavLink>
-      </div>
-
-    </div>
-
-    <div className={`content ${collapsed ? "expanded" : ""}`}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Home
-                user={user}
-                onLogout={() => {
-                  setLoggedIn(false);
-                  setUser("");
-                }}
-              />
-            }
-          />
-          <Route path="/about" element={<About />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/add-customer" element={<AddCustomer />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/add-order" element={<AddOrder />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </div>
-    </div>
-  </Router>
-);
+      {/* Protected Admin */}
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<Dashboard />} />
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="customers" element={<Customers />} />
+        <Route path="customers" element={<Customers />} />
+        <Route path="add-customer" element={<AddCustomer />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="products" element={<AdminProducts />} />
+        <Route path="add-product" element={<AddProduct />} />
+      </Route>
+    </Routes>
+  );
 }
+
 export default App;
