@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -7,36 +8,52 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import API from "../api";
 
 function SalesChart() {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const monthlySales = {};
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const res = await API.get("/orders");
 
-  orders.forEach((order) => {
-    if (order.status === "Delivered" && order.deliveryDate) {
-      const month = new Date(order.deliveryDate).toLocaleString("default", {
-        month: "short",
-      });
+        const monthlySales = {};
 
-      monthlySales[month] =
-        (monthlySales[month] || 0) + Number(order.amount || 0);
-    }
-  });
+        res.data.forEach((order) => {
+          if (order.status === "Delivered" && order.deliveryDate) {
+            const month = new Date(order.deliveryDate).toLocaleString(
+              "default",
+              { month: "short" }
+            );
 
-  const data = Object.keys(monthlySales).map((month) => ({
-    month,
-    revenue: monthlySales[month],
-  }));
+            monthlySales[month] =
+              (monthlySales[month] || 0) + Number(order.amount);
+          }
+        });
 
-  if (data.length === 0) {
-    return <p>No delivered orders yet.</p>;
-  }
+        const formatted = Object.keys(monthlySales).map((month) => ({
+          month,
+          revenue: monthlySales[month],
+        }));
+
+        setData(formatted);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  if (loading) return <p>Loading sales data...</p>;
+  if (data.length === 0) return <p>No delivered orders yet.</p>;
 
   return (
     <div className="chart-card">
       <h3>Monthly Revenue</h3>
-
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#333" />

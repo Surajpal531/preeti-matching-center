@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   PieChart,
   Pie,
@@ -6,45 +7,54 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import API from "../api";
 
 function OrderStatusChart() {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const [data, setData] = useState([]);
 
-  const statusCount = {};
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const res = await API.get("/orders");
 
-orders.forEach((order) => {
-  if (!statusCount[order.status]) {
-    statusCount[order.status] = 0;
-  }
-  statusCount[order.status]++;
-});
+      const statusCount = {};
 
+      res.data.forEach((order) => {
+        statusCount[order.status] =
+          (statusCount[order.status] || 0) + 1;
+      });
 
-  const data = Object.keys(statusCount).map((status) => ({
-    name: status,
-    value: statusCount[status],
-  }));
+      const formatted = Object.keys(statusCount).map((status) => ({
+        name: status,
+        value: statusCount[status],
+      }));
 
-  const COLORS = ["#ff9800", "#2196f3", "#4caf50", "#9c27b0", "#f44336"];
+      setData(formatted);
+    };
 
-  if (orders.length === 0) {
-    return <p>No orders yet.</p>;
-  }
+    fetchOrders();
+  }, []);
+
+  const COLORS = [
+    "#ff9800",
+    "#2196f3",
+    "#4caf50",
+    "#9c27b0",
+    "#f44336",
+  ];
+
+  if (data.length === 0) return <p>No orders yet.</p>;
 
   return (
     <div className="chart-card">
       <h3>Order Status Distribution</h3>
-
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
-          <Pie
-            data={data}
-            dataKey="value"
-            outerRadius={100}
-            label
-          >
+          <Pie data={data} dataKey="value" outerRadius={100} label>
             {data.map((entry, index) => (
-              <Cell key={index} fill={COLORS[index % COLORS.length]} />
+              <Cell
+                key={index}
+                fill={COLORS[index % COLORS.length]}
+              />
             ))}
           </Pie>
           <Tooltip />

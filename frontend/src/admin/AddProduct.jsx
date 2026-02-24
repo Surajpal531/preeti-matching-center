@@ -1,36 +1,37 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api";
 
 function AddProduct() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newProduct = {
-      id: Date.now(),
-      name,
-      price,
-      image,
-    };
+    try {
+      await API.post("/products", {
+        name,
+        price,
+        image,
+      });
 
-    const existing = JSON.parse(localStorage.getItem("products")) || [];
-    localStorage.setItem("products", JSON.stringify([...existing, newProduct]));
-
-    alert("Product Added Successfully!");
-    navigate("/admin/products");
+      alert("Product Added Successfully!");
+      navigate("/admin/products");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div>
-      <h2>Add New Product</h2>
+      <h2>Add Product</h2>
 
       <form className="admin-form" onSubmit={handleSubmit}>
         <input
-          type="text"
           placeholder="Product Name"
           required
           value={name}
@@ -38,15 +39,14 @@ function AddProduct() {
         />
 
         <input
-          type="text"
-          placeholder="Price (₹)"
+          type="number"
+          placeholder="Price"
           required
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
 
         <input
-          type="text"
           placeholder="Image URL"
           required
           value={image}

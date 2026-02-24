@@ -1,27 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api";
 
 function AddCustomer() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [measurements, setMeasurements] = useState("");
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newCustomer = {
-      id: Date.now(),
-      name,
-      phone,
-      measurements,
-    };
+    try {
+      await API.post("/customers", {
+        name,
+        phone,
+        measurements,
+      });
 
-    const existing = JSON.parse(localStorage.getItem("customers")) || [];
-    localStorage.setItem("customers", JSON.stringify([...existing, newCustomer]));
-
-    alert("Customer Added Successfully!");
-    navigate("/admin/customers");
+      alert("Customer Added Successfully!");
+      navigate("/admin/customers");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -46,7 +48,7 @@ function AddCustomer() {
         />
 
         <textarea
-          placeholder="Measurements (Bust, Waist, Length, etc)"
+          placeholder="Measurements"
           required
           value={measurements}
           onChange={(e) => setMeasurements(e.target.value)}

@@ -1,26 +1,41 @@
 import { useEffect, useState } from "react";
+import API from "../api";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("orders")) || [];
-    setOrders(stored);
-  }, []);
-
-  const updateStatus = (id, newStatus) => {
-    const updated = orders.map((order) =>
-      order.id === id ? { ...order, status: newStatus } : order
-    );
-
-    setOrders(updated);
-    localStorage.setItem("orders", JSON.stringify(updated));
+  // 🔹 Fetch Orders from Backend
+  const fetchOrders = async () => {
+    try {
+      const res = await API.get("/orders");
+      setOrders(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleDelete = (id) => {
-    const updated = orders.filter((order) => order.id !== id);
-    setOrders(updated);
-    localStorage.setItem("orders", JSON.stringify(updated));
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  // 🔹 Update Order Status
+  const updateStatus = async (id, newStatus) => {
+    try {
+      await API.put(`/orders/${id}`, { status: newStatus });
+      fetchOrders();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // 🔹 Delete Order
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/orders/${id}`);
+      fetchOrders();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -44,7 +59,7 @@ function Orders() {
 
           <tbody>
             {orders.map((order) => (
-              <tr key={order.id}>
+              <tr key={order._id}>
                 <td>{order.customerName}</td>
                 <td>{order.dressType}</td>
                 <td>₹{order.amount}</td>
@@ -53,7 +68,7 @@ function Orders() {
                   <select
                     value={order.status}
                     onChange={(e) =>
-                      updateStatus(order.id, e.target.value)
+                      updateStatus(order._id, e.target.value)
                     }
                   >
                     <option>Pending</option>
@@ -65,7 +80,7 @@ function Orders() {
                 <td>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDelete(order.id)}
+                    onClick={() => handleDelete(order._id)}
                   >
                     Delete
                   </button>

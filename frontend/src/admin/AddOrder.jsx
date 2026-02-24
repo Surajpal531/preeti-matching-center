@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api";
 
 function AddOrder() {
   const [customers, setCustomers] = useState([]);
@@ -7,30 +8,42 @@ function AddOrder() {
   const [dressType, setDressType] = useState("");
   const [amount, setAmount] = useState("");
   const [deliveryDate, setDeliveryDate] = useState("");
+
   const navigate = useNavigate();
 
+  // 🔹 Fetch customers from backend
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("customers")) || [];
-    setCustomers(stored);
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newOrder = {
-      id: Date.now(),
-      customerName,
-      dressType,
-      amount,
-      deliveryDate,
-      status: "Pending",
+    const fetchCustomers = async () => {
+      try {
+        const res = await API.get("/customers");
+        setCustomers(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    const existing = JSON.parse(localStorage.getItem("orders")) || [];
-    localStorage.setItem("orders", JSON.stringify([...existing, newOrder]));
+    fetchCustomers();
+  }, []);
 
-    alert("Order Created Successfully!");
-    navigate("/admin/orders");
+  // 🔹 Submit order to backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await API.post("/orders", {
+        customerName,
+        dressType,
+        amount,
+        deliveryDate,
+        status: "Pending",
+      });
+
+      alert("Order Created Successfully!");
+      navigate("/admin/orders");
+    } catch (error) {
+      console.log(error);
+      alert("Error creating order");
+    }
   };
 
   return (
@@ -46,7 +59,7 @@ function AddOrder() {
         >
           <option value="">Select Customer</option>
           {customers.map((c) => (
-            <option key={c.id} value={c.name}>
+            <option key={c._id} value={c.name}>
               {c.name}
             </option>
           ))}

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -7,36 +8,45 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import API from "../api";
 
 function RevenueTrendChart() {
-  const orders = JSON.parse(localStorage.getItem("orders")) || [];
+  const [data, setData] = useState([]);
 
-  const monthlyRevenue = {};
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const res = await API.get("/orders");
 
-  orders.forEach((order) => {
-    if (order.status === "Delivered" && order.deliveryDate) {
-      const month = new Date(order.deliveryDate).toLocaleString("default", {
-        month: "short",
+      const monthly = {};
+
+      res.data.forEach((order) => {
+        if (order.status === "Delivered" && order.deliveryDate) {
+          const month = new Date(order.deliveryDate).toLocaleString(
+            "default",
+            { month: "short" }
+          );
+
+          monthly[month] =
+            (monthly[month] || 0) + Number(order.amount);
+        }
       });
 
-      monthlyRevenue[month] =
-        (monthlyRevenue[month] || 0) + Number(order.amount || 0);
-    }
-  });
+      const formatted = Object.keys(monthly).map((month) => ({
+        month,
+        revenue: monthly[month],
+      }));
 
-  const data = Object.keys(monthlyRevenue).map((month) => ({
-    month,
-    revenue: monthlyRevenue[month],
-  }));
+      setData(formatted);
+    };
 
-  if (data.length === 0) {
-    return <p>No revenue data yet.</p>;
-  }
+    fetchOrders();
+  }, []);
+
+  if (data.length === 0) return <p>No revenue data.</p>;
 
   return (
     <div className="chart-card">
       <h3>Revenue Trend</h3>
-
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#333" />

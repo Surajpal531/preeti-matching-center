@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
+import API from "../api";
 
 function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("products")) || [];
-    setProducts(stored);
+    const fetchProducts = async () => {
+      const res = await API.get("/products");
+      setProducts(res.data);
+    };
+
+    fetchProducts();
   }, []);
 
   return (
@@ -13,17 +18,13 @@ function Products() {
       <h1>Our Collection</h1>
 
       <div className="products-grid">
-        {products.length === 0 ? (
-          <p>No products available.</p>
-        ) : (
-          products.map((item) => (
-            <div key={item.id} className="product-card">
-              <img src={item.image} alt={item.name} />
-              <h3>{item.name}</h3>
-              <p>₹{item.price}</p>
-            </div>
-          ))
-        )}
+        {products.map((p) => (
+          <div key={p._id} className="product-card">
+            <img src={p.image} alt={p.name} />
+            <h3>{p.name}</h3>
+            <p>₹{p.price}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

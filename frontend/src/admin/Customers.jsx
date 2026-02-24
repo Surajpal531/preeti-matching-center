@@ -1,17 +1,29 @@
 import { useEffect, useState } from "react";
+import API from "../api";
 
 function Customers() {
   const [customers, setCustomers] = useState([]);
 
+  const fetchCustomers = async () => {
+    try {
+      const res = await API.get("/customers");
+      setCustomers(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("customers")) || [];
-    setCustomers(stored);
+    fetchCustomers();
   }, []);
 
-  const handleDelete = (id) => {
-    const updated = customers.filter((c) => c.id !== id);
-    setCustomers(updated);
-    localStorage.setItem("customers", JSON.stringify(updated));
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/customers/${id}`);
+      fetchCustomers();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -33,14 +45,14 @@ function Customers() {
 
           <tbody>
             {customers.map((c) => (
-              <tr key={c.id}>
+              <tr key={c._id}>
                 <td>{c.name}</td>
                 <td>{c.phone}</td>
                 <td>{c.measurements}</td>
                 <td>
                   <button
                     className="delete-btn"
-                    onClick={() => handleDelete(c.id)}
+                    onClick={() => handleDelete(c._id)}
                   >
                     Delete
                   </button>

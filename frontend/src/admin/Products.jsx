@@ -1,61 +1,69 @@
 import { useEffect, useState } from "react";
+import API from "../api";
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
 
+  const fetchProducts = async () => {
+    try {
+      const res = await API.get("/products");
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("products")) || [];
-    setProducts(stored);
+    fetchProducts();
   }, []);
 
-  const handleDelete = (id) => {
-    const updated = products.filter((item) => item.id !== id);
-    setProducts(updated);
-    localStorage.setItem("products", JSON.stringify(updated));
+  const handleDelete = async (id) => {
+    try {
+      await API.delete(`/products/${id}`);
+      fetchProducts();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div>
       <h2>Manage Products</h2>
 
-      {products.length === 0 ? (
-        <p>No products added yet.</p>
-      ) : (
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+      <table className="admin-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-          <tbody>
-            {products.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="table-image"
-                  />
-                </td>
-                <td>{item.name}</td>
-                <td>₹{item.price}</td>
-                <td>
-                  <button
-                    className="delete-btn"
-                    onClick={() => handleDelete(item.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+        <tbody>
+          {products.map((p) => (
+            <tr key={p._id}>
+              <td>{p.name}</td>
+              <td>₹{p.price}</td>
+              <td>
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  width="60"
+                />
+              </td>
+              <td>
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(p._id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
