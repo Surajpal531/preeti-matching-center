@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import SalesChart from "./SalesChart";
 
 function Dashboard() {
   const [stats, setStats] = useState({
