@@ -1,19 +1,26 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // TEMP ADMIN CREDENTIALS
-    if (username === "admin" && password === "1234") {
-      localStorage.setItem("adminAuth", "true");
+    try {
+      const res = await API.post("/admin/login", {
+        email,
+        password,
+      });
+
+      // Save JWT token
+      localStorage.setItem("token", res.data.token);
+
       navigate("/admin");
-    } else {
+    } catch (error) {
       alert("Invalid credentials");
     }
   };
@@ -24,10 +31,11 @@ function Login() {
         <h2>Admin Login</h2>
 
         <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          type="email"
+          placeholder="Admin Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <input
@@ -35,6 +43,7 @@ function Login() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
         <button type="submit">Login</button>

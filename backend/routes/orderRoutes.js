@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
+const auth = require("../middleware/authMiddleware");
 
 // ==========================
 // GET ALL ORDERS

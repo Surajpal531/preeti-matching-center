@@ -21,7 +21,7 @@ function AdminLayout() {
         <button
           className="admin-logout"
           onClick={() => {
-            localStorage.removeItem("adminAuth");
+            localStorage.removeItem("token");
             window.location.href = "/admin/login";
           }}
         >
