@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import SalesChart from "./SalesChart";
+import OrderStatusChart from "./OrderStatusChart";
+import RevenueTrendChart from "./RevenueTrendChart";
+import TopProductsChart from "./TopProductsChart";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -73,6 +77,10 @@ function Dashboard() {
         </div>
 
       </div>
+      <SalesChart />
+      <OrderStatusChart />
+      <RevenueTrendChart />
+      <TopProductsChart />
     </div>
   );
 }
