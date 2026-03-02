@@ -20,6 +20,7 @@ import ProtectedRoute from "./admin/ProtectedRoute";
 import AddProduct from "./admin/AddProduct";
 import AddCustomer from "./admin/AddCustomer";
 import AddOrder from "./admin/AddOrder";
+import AddGallery from "./admin/AddGallery";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
         <Route path="add-order" element={<AddOrder />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="add-product" element={<AddProduct />} />
+        <Route path="add-gallery" element={<AddGallery />} />
       </Route>
     </Routes>
   );

@@ -3,10 +3,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 
+
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
 
 // Routes
 app.use("/api/products", require("./routes/productRoutes"));
@@ -14,6 +17,7 @@ app.use("/api/customers", require("./routes/customerRoutes"));
 app.use("/api/orders", require("./routes/orderRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/uploads", express.static("uploads"));
+app.use("/api/gallery", require("./routes/galleryRoutes"));
 
 mongoose
   .connect(process.env.MONGO_URI)

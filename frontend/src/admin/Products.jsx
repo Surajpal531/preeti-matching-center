@@ -47,7 +47,7 @@ function AdminProducts() {
               <td>₹{p.price}</td>
               <td>
                 <img
-                  src={p.image}
+                  src={`http://localhost:5000${p.image}`}
                   alt={p.name}
                   width="60"
                 />

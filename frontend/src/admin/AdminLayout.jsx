@@ -16,6 +16,7 @@ function AdminLayout() {
           <NavLink to="/admin/add-product">Add Product</NavLink>
           <NavLink to="/admin/add-customer">Add Customer</NavLink>
           <NavLink to="/admin/add-order">Add Order</NavLink>
+          <NavLink to="/admin/add-gallery">Add Gallery</NavLink>
         </nav>
 
         <button

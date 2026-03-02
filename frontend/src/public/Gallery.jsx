@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import API from "../api";
 
 function Gallery() {
-  const images = [
-    "https://images.pexels.com/photos/932401/pexels-photo-932401.jpeg",
-    "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg",
-    "https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg",
-    "https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg",
-    "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg",
-    "https://images.pexels.com/photos/2065200/pexels-photo-2065200.jpeg",
-  ];
-
+  const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  useEffect(() => {
+    const fetchGallery = async () => {
+      const res = await API.get("/gallery");
+      setImages(res.data);
+    };
+
+    fetchGallery();
+  }, []);
 
   return (
     <div className="gallery-page">
@@ -21,18 +23,24 @@ function Gallery() {
       </div>
 
       <div className="gallery-grid">
-        {images.map((img, index) => (
+        {images.map((item) => (
           <div
-            key={index}
+            key={item._id}
             className="gallery-item"
-            onClick={() => setSelectedImage(img)}
+            onClick={() =>
+              setSelectedImage(
+                `http://localhost:5000${item.image}`
+              )
+            }
           >
-            <img src={img} alt="gallery" />
+            <img
+              src={`http://localhost:5000${item.image}`}
+              alt="gallery"
+            />
           </div>
         ))}
       </div>
 
-      {/* Lightbox */}
       {selectedImage && (
         <div
           className="lightbox"
@@ -41,7 +49,6 @@ function Gallery() {
           <img src={selectedImage} alt="preview" />
         </div>
       )}
-
     </div>
   );
 }
