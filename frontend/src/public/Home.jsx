@@ -17,7 +17,7 @@ function Home() {
               </a>
 
               <a
-                href="https://wa.me/91XXXXXXXXXX"
+                href="https://wa.me/919329557469"
                 target="_blank"
                 rel="noreferrer"
                 className="secondary-btn"
@@ -36,18 +36,18 @@ function Home() {
 
         <div className="featured-grid">
           <div className="featured-card">
-            <img src="https://images.pexels.com/photos/932401/pexels-photo-932401.jpeg" alt="" />
+            <img src="https://5.imimg.com/data5/SELLER/Default/2023/8/335204762/HD/NY/MZ/195146203/ladies-designer-suits.jpg" alt="" />
             <h3>Designer Suits</h3>
           </div>
 
           <div className="featured-card">
-            <img src="https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg" alt="" />
-            <h3>Party Gowns</h3>
+            <img src="https://thedesigncart.com/cdn/shop/files/img-6022_compressed_1080x.jpg?v=1691556990" alt="" />
+            <h3>Embroided Banarsi Silk</h3>
           </div>
 
           <div className="featured-card">
-            <img src="https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg" alt="" />
-            <h3>Silk Sarees</h3>
+            <img src="https://t4.ftcdn.net/jpg/01/62/28/09/360_F_162280951_WPnIPojcyNu7IkHNNieEEWwGvXDDNSlj.jpg" alt="" />
+            <h3>Plain Cotton</h3>
           </div>
         </div>
       </section>

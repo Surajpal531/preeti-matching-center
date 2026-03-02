@@ -33,7 +33,7 @@ function PublicLayout() {
       <Outlet />
 
       <a
-        href="https://wa.me/919329751775"
+        href="https://wa.me/919329557469"
         target="_blank"
         rel="noreferrer"
         className="floating-whatsapp"
