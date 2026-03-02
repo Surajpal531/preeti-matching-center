@@ -808,16 +808,24 @@
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
+/* ================= DASHBOARD GRID ================= */
+
 .charts-grid {
-  margin-top: 40px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 30px;
 }
 
-.chart-card {
-  background: #1e1e1e;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+/* Responsive for mobile */
+@media (max-width: 900px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.chart-card h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #ccc;
+  font-weight: 500;
 }

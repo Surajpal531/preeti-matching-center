@@ -77,10 +77,12 @@ function Dashboard() {
         </div>
 
       </div>
-      <SalesChart />
-      <OrderStatusChart />
-      <RevenueTrendChart />
-      <TopProductsChart />
+      <div className="charts-grid">
+        <SalesChart />
+        <OrderStatusChart />
+        <TopProductsChart />
+        <RevenueTrendChart />
+      </div>
     </div>
   );
 }

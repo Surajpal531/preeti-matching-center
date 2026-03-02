@@ -3,7 +3,7 @@ function Contact() {
     <div className="contact-page">
 
       <div className="contact-header">
-        <h1>Visit Our Boutique</h1>
+        <h1>Visit Our Shop</h1>
         <p>We would love to style you beautifully.</p>
       </div>
 
@@ -22,13 +22,13 @@ function Contact() {
 
           <div className="info-card">
             <h3>📞 Phone</h3>
-            <p>+91 XXXXX XXXXX</p>
+            <p>+91 93295 57469</p>
           </div>
 
           <div className="info-card">
             <h3>💬 WhatsApp</h3>
             <a
-              href="https://wa.me/91XXXXXXXXXX"
+              href="https://wa.me/919329557469"
               target="_blank"
               rel="noreferrer"
               className="primary-btn"
