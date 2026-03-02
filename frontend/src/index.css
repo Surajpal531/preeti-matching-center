@@ -246,7 +246,7 @@
 
 /* Grid */
 .products-grid {
-  padding: 0 60px;
+  padding: 10px 120px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
   gap: 40px;
@@ -264,17 +264,23 @@
   transform: translateY(-8px);
   background: rgba(255,255,255,0.1);
 }
+@media (max-width: 768px) {
+  .product-image-wrapper {
+    height: 250px;
+  }
+}
 
 /* Image */
 .image-wrapper {
-  height: 380px;
+  width: 100%;
+  height: 320px;   /* 👈 control height here */
   overflow: hidden;
 }
 
 .image-wrapper img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 320px;   /* 👈 control height here */
+  overflow: hidden;
   transition: 0.5s ease;
 }
 

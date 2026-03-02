@@ -3,6 +3,7 @@ import SalesChart from "./SalesChart";
 import OrderStatusChart from "./OrderStatusChart";
 import RevenueTrendChart from "./RevenueTrendChart";
 import TopProductsChart from "./TopProductsChart";
+import API from "../api";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -15,64 +16,58 @@ function Dashboard() {
   });
   const [dateRange, setDateRange] = useState("30");
 
-  useEffect(() => {
-    const products = JSON.parse(localStorage.getItem("products")) || [];
-    const customers = JSON.parse(localStorage.getItem("customers")) || [];
-    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+ useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [productsRes, customersRes, ordersRes] =
+          await Promise.all([
+            API.get("/products"),
+            API.get("/customers"),
+            API.get("/orders"),
+          ]);
 
-    const pending = orders.filter(o => o.status === "Pending").length;
+        const products = productsRes.data;
+        const customers = customersRes.data;
+        const orders = ordersRes.data;
 
-    const revenue = orders.reduce((total, order) => {
-      return order.status === "Delivered"
-        ? total + Number(order.amount)
-        : total;
-    }, 0);
+        const pending = orders.filter(
+          (o) => o.status === "Pending"
+        ).length;
 
-    const today = new Date().toISOString().split("T")[0];
-    const todayOrders = orders.filter(o => o.deliveryDate === today).length;
+        const revenue = orders.reduce((total, order) => {
+          return order.status === "Delivered"
+            ? total + Number(order.amount)
+            : total;
+        }, 0);
 
-    setStats({
-      products: products.length,
-      customers: customers.length,
-      orders: orders.length,
-      pending,
-      revenue,
-      todayOrders,
-    });
+        const today = new Date().toISOString().split("T")[0];
+
+        const todayOrders = orders.filter(
+          (o) =>
+            o.deliveryDate &&
+            o.deliveryDate.split("T")[0] === today
+        ).length;
+
+        setStats({
+          products: products.length,
+          customers: customers.length,
+          orders: orders.length,
+          pending,
+          revenue,
+          todayOrders,
+        });
+      } catch (error) {
+        console.log("Dashboard Error:", error);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   return (
     <div>
       <h2>Dashboard Overview</h2>
-      <div className="date-filter">
-        <button
-          className={dateRange === "7" ? "active" : ""}
-          onClick={() => setDateRange("7")}
-        >
-          Last 7 Days
-        </button>
-
-        <button
-          className={dateRange === "30" ? "active" : ""}
-          onClick={() => setDateRange("30")}
-        >
-          Last 30 Days
-        </button>
-
-        <button
-          className={dateRange === "90" ? "active" : ""}
-          onClick={() => setDateRange("90")}
-        >
-          Last 90 Days
-        </button>
-
-        <button
-          className={dateRange === "all" ? "active" : ""}
-          onClick={() => setDateRange("all")}
-        >
-          All Time
-        </button>
-      </div>
+     
 
       <div className="dashboard-grid">
 
@@ -106,6 +101,35 @@ function Dashboard() {
           <p>₹{stats.revenue}</p>
         </div>
 
+      </div>
+       <div className="date-filter">
+        <button
+          className={dateRange === "7" ? "active" : ""}
+          onClick={() => setDateRange("7")}
+        >
+          Last 7 Days
+        </button>
+
+        <button
+          className={dateRange === "30" ? "active" : ""}
+          onClick={() => setDateRange("30")}
+        >
+          Last 30 Days
+        </button>
+
+        <button
+          className={dateRange === "90" ? "active" : ""}
+          onClick={() => setDateRange("90")}
+        >
+          Last 90 Days
+        </button>
+
+        <button
+          className={dateRange === "all" ? "active" : ""}
+          onClick={() => setDateRange("all")}
+        >
+          All Time
+        </button>
       </div>
        <div className="charts-grid">
           <SalesChart dateRange={dateRange} />

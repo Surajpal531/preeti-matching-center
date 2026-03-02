@@ -46,10 +46,21 @@ function SalesChart({ dateRange }) {
           }
         });
 
-        const formatted = Object.keys(monthlySales).map((month) => ({
-          month,
-          revenue: monthlySales[month],
-        }));
+        const monthOrder = [
+          "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+        ];
+
+        const formatted = Object.keys(monthlySales)
+          .map((month) => ({
+            month,
+            revenue: monthlySales[month],
+          }))
+          .sort(
+            (a, b) =>
+              monthOrder.indexOf(a.month) -
+              monthOrder.indexOf(b.month)
+          );
 
         setData(formatted);
         setLoading(false);

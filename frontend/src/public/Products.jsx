@@ -20,10 +20,12 @@ function Products() {
       <div className="products-grid">
         {products.map((p) => (
           <div key={p._id} className="product-card">
-            <img
-              src={`http://localhost:5000${p.image}`}
-              alt={p.name}
-            />
+            <div className="image-wrapper">
+              <img
+                src={`http://localhost:5000${p.image}`}
+                alt={p.name}
+              />
+            </div>
             <h3>{p.name}</h3>
             <p>₹{p.price}</p>
           </div>

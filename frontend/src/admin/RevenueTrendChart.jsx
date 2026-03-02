@@ -31,10 +31,21 @@ function RevenueTrendChart() {
         }
       });
 
-      const formatted = Object.keys(monthly).map((month) => ({
-        month,
-        revenue: monthly[month],
-      }));
+      const monthOrder = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+      ];
+
+      const formatted = Object.keys(monthly)
+        .map((month) => ({
+          month,
+          revenue: monthly[month],
+        }))
+        .sort(
+          (a, b) =>
+            monthOrder.indexOf(a.month) -
+            monthOrder.indexOf(b.month)
+        );
 
       setData(formatted);
     };
