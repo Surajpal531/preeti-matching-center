@@ -829,3 +829,27 @@
   color: #ccc;
   font-weight: 500;
 }
+.date-filter {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.date-filter button {
+  background: #1a1a1a;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #ccc;
+  transition: 0.3s;
+}
+
+.date-filter button:hover {
+  background: #333;
+}
+
+.date-filter button.active {
+  background: #e91e63;
+  color: white;
+}

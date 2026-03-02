@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import API from "../api";
 
-function SalesChart() {
+function SalesChart({ dateRange }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,14 +19,27 @@ function SalesChart() {
       try {
         const res = await API.get("/orders");
 
+        let filtered = res.data;
+
+        // 🔹 Apply date filter
+        if (dateRange !== "all") {
+          const days = Number(dateRange);
+          const cutoff = new Date();
+          cutoff.setDate(cutoff.getDate() - days);
+
+          filtered = filtered.filter(
+            (order) =>
+              order.deliveryDate &&
+              new Date(order.deliveryDate) >= cutoff
+          );
+        }
+
         const monthlySales = {};
 
-        res.data.forEach((order) => {
+        filtered.forEach((order) => {
           if (order.status === "Delivered" && order.deliveryDate) {
-            const month = new Date(order.deliveryDate).toLocaleString(
-              "default",
-              { month: "short" }
-            );
+            const month = new Date(order.deliveryDate)
+              .toLocaleString("default", { month: "short" });
 
             monthlySales[month] =
               (monthlySales[month] || 0) + Number(order.amount);
@@ -46,15 +59,15 @@ function SalesChart() {
     };
 
     fetchOrders();
-  }, []);
+  }, [dateRange]);
 
   if (loading) return <p>Loading sales data...</p>;
-  if (data.length === 0) return <p>No delivered orders yet.</p>;
+  if (data.length === 0) return <p>No delivered orders in this period.</p>;
 
   return (
     <div className="chart-card">
       <h3>Monthly Revenue</h3>
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height={250}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#333" />
           <XAxis dataKey="month" stroke="#aaa" />

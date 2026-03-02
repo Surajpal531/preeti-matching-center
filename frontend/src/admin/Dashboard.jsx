@@ -13,6 +13,7 @@ function Dashboard() {
     revenue: 0,
     todayOrders: 0,
   });
+  const [dateRange, setDateRange] = useState("30");
 
   useEffect(() => {
     const products = JSON.parse(localStorage.getItem("products")) || [];
@@ -43,6 +44,35 @@ function Dashboard() {
   return (
     <div>
       <h2>Dashboard Overview</h2>
+      <div className="date-filter">
+        <button
+          className={dateRange === "7" ? "active" : ""}
+          onClick={() => setDateRange("7")}
+        >
+          Last 7 Days
+        </button>
+
+        <button
+          className={dateRange === "30" ? "active" : ""}
+          onClick={() => setDateRange("30")}
+        >
+          Last 30 Days
+        </button>
+
+        <button
+          className={dateRange === "90" ? "active" : ""}
+          onClick={() => setDateRange("90")}
+        >
+          Last 90 Days
+        </button>
+
+        <button
+          className={dateRange === "all" ? "active" : ""}
+          onClick={() => setDateRange("all")}
+        >
+          All Time
+        </button>
+      </div>
 
       <div className="dashboard-grid">
 
@@ -77,12 +107,12 @@ function Dashboard() {
         </div>
 
       </div>
-      <div className="charts-grid">
-        <SalesChart />
-        <OrderStatusChart />
-        <TopProductsChart />
-        <RevenueTrendChart />
-      </div>
+       <div className="charts-grid">
+          <SalesChart dateRange={dateRange} />
+          <OrderStatusChart dateRange={dateRange} />
+          <TopProductsChart dateRange={dateRange} />
+          <RevenueTrendChart />
+        </div>
     </div>
   );
 }
