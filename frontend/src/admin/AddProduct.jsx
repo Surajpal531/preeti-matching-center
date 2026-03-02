@@ -5,25 +5,32 @@ import API from "../api";
 function AddProduct() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("price", price);
+    formData.append("image", image);
+
     try {
-      await API.post("/products", {
-        name,
-        price,
-        image,
+      await API.post("/products", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       alert("Product Added Successfully!");
       navigate("/admin/products");
     } catch (error) {
-      console.log(error);
-    }
+        console.log("FULL ERROR:", error);
+        console.log("RESPONSE:", error.response?.data);
+        alert(error.response?.data?.message || "Upload failed");
+      }
   };
 
   return (
@@ -47,10 +54,10 @@ function AddProduct() {
         />
 
         <input
-          placeholder="Image URL"
+          type="file"
+          accept="image/*"
           required
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          onChange={(e) => setImage(e.target.files[0])}
         />
 
         <button type="submit">Add Product</button>

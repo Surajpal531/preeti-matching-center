@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const upload = require("../middleware/upload");
+const auth = require("../middleware/authMiddleware");
 
 // Get all products
 router.get("/", async (req, res) => {
@@ -9,10 +11,24 @@ router.get("/", async (req, res) => {
 });
 
 // Add product
-router.post("/", async (req, res) => {
-  const newProduct = new Product(req.body);
-  await newProduct.save();
-  res.json(newProduct);
+router.post("/", auth, upload.single("image"), async (req, res) => {
+  try {
+    const { name, price } = req.body;
+
+    const product = new Product({
+      name,
+      price,
+      image: req.file
+        ? `/uploads/${req.file.filename}`
+        : null,
+    });
+
+    await product.save();
+
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
 // Delete product
